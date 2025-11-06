@@ -1,3 +1,27 @@
+// src/js/utils.mjs
+
+// Get a query parameter from the URL
+export function getParam(param) {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  return urlParams.get(param);
+}
+
+// Get data from localStorage (parsed as JSON)
+export function getLocalStorage(key) {
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : null;
+}
+
+// Save data to localStorage
+export function setLocalStorage(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+
+
+
+
 // wrapper for querySelector...returns matching element
 export function qs(selector, parent = document) {
   return parent.querySelector(selector);
