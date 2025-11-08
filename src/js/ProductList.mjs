@@ -16,7 +16,7 @@ export default class ProductList {
     this.listElement.innerHTML = "";
 
     // Loop through each product and build HTML
-    const productCards = list.map(this.renderProductCard).join("");
+    const productCards = list.map(product => this.renderProductCard(product)).join("");
     this.listElement.innerHTML = productCards;
   }
 
@@ -32,4 +32,4 @@ export default class ProductList {
       </li>
     `;
   }
-}
+ }
