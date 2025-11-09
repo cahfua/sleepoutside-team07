@@ -6,7 +6,7 @@ function renderCartContents() {
     document.querySelector(".product-list").innerHTML = `
       <li class="cart-card empty">
         <p>Your cart is empty.</p>
-        <p><a href="/index.html">Continue shopping</a></p>
+        <p><a href="../index.html">Continue shopping</a></p>
       </li>`;
     return;
   }
