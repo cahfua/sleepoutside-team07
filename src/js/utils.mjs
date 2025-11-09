@@ -42,3 +42,19 @@ export function renderListWithTemplate(
   const htmlStrings = list.map(templateFn);
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
+
+// update cart count badge
+export function updateCartCount() {
+  const cartCountElement = qs(".cart-count");
+  if (!cartCountElement) return;
+
+  try {
+    const cartItems = getLocalStorage("so-cart");
+    const count = cartItems ? cartItems.length : 0;
+    cartCountElement.textContent = count;
+    cartCountElement.style.display = count > 0 ? "block" : "none";
+  } catch (error) {
+    cartCountElement.textContent = "0";
+    cartCountElement.style.display = "none";
+  }
+}
