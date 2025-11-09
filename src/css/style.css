@@ -208,6 +208,18 @@ button {
   font-size: 1em;
 }
 
+/* Discount Badge (ca) */
+
+.discount-badge {
+  background-color: #ffe9e9;
+  color: #b30000;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.4rem;
+  margin-left: 0.5rem;
+}
+
 /* End product list card */
 
 .product-detail {
@@ -278,3 +290,31 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+
+/* Start empty cart message */
+
+.cart-card.empty {
+  text-align: center;
+  font-size: 1rem;
+  color: #444;
+  margin-top: 2rem;
+}
+
+.cart-card.empty a {
+  display: inline-block;
+  background-color: var(--brand, #046c84);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.cart-card.empty a:hover {
+  background-color: var(--brand-700, #035a6c);
+  transform: translateY(-2px);
+}
+
+/* End empty cart message */
