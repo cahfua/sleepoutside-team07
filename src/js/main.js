@@ -1,6 +1,10 @@
+import Alert from "./Alert.js";
 import ProductData from "./ProductData.mjs";
 import ProductList from "./ProductList.mjs";
 import { qs, updateCartCount } from "./utils.mjs";
+
+// Create an instance of Alert
+new Alert();
 
 // Create an instance of ProductData for tents
 const dataSource = new ProductData("tents");
