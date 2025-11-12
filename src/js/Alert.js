@@ -10,7 +10,7 @@ class Alert {
 
   async loadAlerts() {
     try {
-      const response = await fetch("../json/alerts.json");
+      const response = await fetch("/json/alerts.json");
       if (response.ok) {
         return await response.json();
       }
