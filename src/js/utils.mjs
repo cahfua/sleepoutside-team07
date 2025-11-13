@@ -57,15 +57,10 @@ export function updateCartCount() {
     cartCountElement.textContent = "0";
     cartCountElement.style.display = "none";
   }
-
-  export function renderWithTemplate(template, parentElement, data, callback) {
-  parentElement.innerHTML = template;
-  if (callback) {
-    callback(data);
-  }
 }
 
-}
+
+
 
 // for header and footnote
 export function renderWithTemplate(template, parentElement, data, callback) {
@@ -85,6 +80,9 @@ export async function loadTemplate(path) {
 export async function loadHeaderFooter() {
   const headerHTML = await loadTemplate('/partials/header.html');
   const footerHTML = await loadTemplate('/partials/footer.html');
+
+
+
 
   const headerElement = document.getElementById('main-header');
   const footerElement = document.getElementById('main-footer');
