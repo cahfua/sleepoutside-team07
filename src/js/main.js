@@ -1,22 +1,30 @@
 import Alert from "./Alert.js";
 import ProductData from "./ProductData.mjs";
 import ProductList from "./ProductList.mjs";
-import { qs, updateCartCount } from "./utils.mjs";
+import { qs, updateCartCount, loadHeaderFooter } from "./utils.mjs";
 
-// Create an instance of Alert
-new Alert();
+// Initialize page
+async function init() {
+  // Load header and footer
+  await loadHeaderFooter();
 
-// Create an instance of ProductData for tents
-const dataSource = new ProductData("tents");
+  // Create an instance of Alert
+  new Alert();
 
-// Get the list element
-const listElement = qs(".product-list");
+  // Create an instance of ProductData for tents
+  const dataSource = new ProductData("tents");
 
-// Create an instance of ProductList
-const productList = new ProductList("tents", dataSource, listElement);
+  // Get the list element
+  const listElement = qs(".product-list");
 
-// Initialize and render the product list
-productList.init();
+  // Create an instance of ProductList
+  const productList = new ProductList("tents", dataSource, listElement);
 
-// Update cart count on page load
-updateCartCount();
+  // Initialize and render the product list
+  productList.init();
+
+  // Update cart count on page load
+  updateCartCount();
+}
+
+init();

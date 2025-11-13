@@ -1,7 +1,11 @@
-import { getLocalStorage, updateCartCount } from "./utils.mjs";
+import {
+  getLocalStorage,
+  updateCartCount,
+  loadHeaderFooter,
+} from "./utils.mjs";
 
 function renderCartContents() {
-  const cartItems = getLocalStorage("so-cart");
+  const cartItems = getLocalStorage("so-cart") || [];
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
 }
@@ -25,5 +29,13 @@ function cartItemTemplate(item) {
   return newItem;
 }
 
-renderCartContents();
-updateCartCount();
+// Initialize page
+async function init() {
+  // Load header and footer
+  await loadHeaderFooter();
+
+  renderCartContents();
+  updateCartCount();
+}
+
+init();
