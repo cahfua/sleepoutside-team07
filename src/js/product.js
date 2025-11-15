@@ -9,3 +9,12 @@ product.init();
 
 // Update cart count on page load
 updateCartCount();
+
+async findProductById(id) {
+  const response = await fetch(`${baseURL}product/${id}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch product");
+  }
+  const data = await response.json();
+  return data.Result; // API returns { Result: {...} }
+}
