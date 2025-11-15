@@ -274,6 +274,24 @@ button {
   }
 }
 
+/* Cart footer (total area) */
+.cart-footer {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-top: 2px solid var(--primary-color);
+  text-align: right;
+  font-size: 1.2em;
+}
+
+.cart-footer.hide {
+  display: none;
+}
+
+.cart-total {
+  font-weight: bold;
+}
+
+
 footer {
   font-size: var(--small-font);
   padding: 1em;
