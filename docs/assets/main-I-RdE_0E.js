@@ -1,7 +1,7 @@
 import{r as u,q as c,u as h}from"./utils-BcWnTT7J.js";import{P as p}from"./ProductData-CbvbBcly.js";class f{constructor(){this.init()}async init(){const t=await this.loadAlerts();this.renderAlerts(t)}async loadAlerts(){try{const t=await fetch("/json/alerts.json");if(t.ok)return await t.json()}catch{return[]}}renderAlerts(t){const n=document.querySelector("main");if(t&&t.length>0&&n){const r=document.createElement("section");r.classList.add("alert-list"),t.forEach(a=>{const s=document.createElement("p");s.textContent=a.message,s.style.backgroundColor=a.background,s.style.color=a.color,r.appendChild(s)}),n.prepend(r)}}}function w(e){return`<li class="product-card">
     <a href="product_pages/?product=${e.Id}">
       <img
-        src="${e.Image.replace("../images/","/images/")}"
+        src="${e.Image.replace("../images/","images/")}"
         alt="${e.NameWithoutBrand||e.Name}"
       />
       <h3 class="card__brand">${e.Brand.Name}</h3>
