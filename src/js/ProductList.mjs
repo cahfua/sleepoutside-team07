@@ -20,10 +20,35 @@ export default class ProductList {
     this.dataSource = dataSource;
     this.listElement = listElement;
   }
+
   async init() {
     const list = await this.dataSource.getData();
-    this.renderList(list);
+
+    // check for search term in the URL
+    const params = new URLSearchParams(window.location.search);
+    const searchTerm = params.get("search");
+
+    let productsToRender = list;
+
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+
+      productsToRender = list.filter((product) => {
+        const name = (product.Name || "").toLowerCase();
+        const brand = (product.Brand?.Name || "").toLowerCase();
+        const shortName = (product.NameWithoutBrand || "").toLowerCase();
+
+        return (
+          name.includes(term) ||
+          brand.includes(term) ||
+          shortName.includes(term)
+        );
+      });
+    }
+
+    this.renderList(productsToRender);
   }
+
   renderList(list) {
     renderListWithTemplate(productCardTemplate, this.listElement, list);
   }

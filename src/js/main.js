@@ -18,5 +18,24 @@ const productList = new ProductList("tents", dataSource, listElement);
 // Initialize and render the product list
 productList.init();
 
+// Initialize product search in the navbar
+function initProductSearch() {
+    const form = qs("#product-search-form");
+    const input = qs("#product-search-input");
+
+    if (!form || !input) return;
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const query = input.value.trim();
+        if (!query) return;
+
+        const params = new URLSearchParams({ search: query });
+        window.location.href = `index.html?${params.toString()}`;
+    });    
+}
+
+initProductSearch();
+
 // Update cart count on page load
 updateCartCount();
