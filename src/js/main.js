@@ -1,13 +1,13 @@
 import Alert from "./Alert.js";
-import ProductData from "./ProductData.mjs";
+import ExternalServices from "./ExternalServices.mjs";
 import ProductList from "./ProductList.mjs";
 import { qs, updateCartCount } from "./utils.mjs";
 
 // Create an instance of Alert
 new Alert();
 
-// Create an instance of ProductData for tents
-const dataSource = new ProductData("tents");
+// Create an instance of ExternalServices for tents
+const dataSource = new ExternalServices("tents");
 
 // Get the list element
 const listElement = qs(".product-list");
