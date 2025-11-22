@@ -19,7 +19,18 @@ export default class ProductDetails {
 
   addProductToCart() {
     const currentCart = getLocalStorage("so-cart") || [];
-    currentCart.push(this.product);
+    const existingItemIndex = currentCart.findIndex(
+      (item) => item.Id === this.product.Id
+    );
+
+    if (existingItemIndex !== -1) {
+      const existingItem = currentCart[existingItemIndex];
+      existingItem.quantity = (existingItem.quantity || 1) + 1;
+    } else {
+      const newItem = { ...this.product, quantity: 1 };
+      currentCart.push(newItem);
+    }
+
     setLocalStorage("so-cart", currentCart);
     updateCartCount();
   }

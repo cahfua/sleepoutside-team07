@@ -19,7 +19,7 @@ function packageItems(items) {
     id: item.Id,
     name: item.Name,
     price: item.FinalPrice,
-    quantity: 1,
+    quantity: item.quantity || 1,
   }));
 }
 
@@ -37,7 +37,7 @@ export default class CheckoutProcess {
   // calculate and display item subtotal when page loads
   calculateItemSummary() {
     this.subtotal = this.items.reduce(
-      (sum, item) => sum + item.FinalPrice,
+      (sum, item) => sum + item.FinalPrice * (item.quantity || 1),
       0,
     );
     const subtotalElement = document.querySelector("#summary-subtotal");
