@@ -39,11 +39,11 @@ export default class ProductDetails {
         ? this.product.Colors[0].ColorName
         : "";
     //  Calculate discount
-let discountHTML = "";
-const original = this.product.SuggestedRetailPrice;
-const final = this.product.FinalPrice;
+  let discountHTML = "";
+  const original = this.product.SuggestedRetailPrice;
+  const final = this.product.FinalPrice;
 
-if (original && original > final) {
+  if (original && original > final) {
   const amountOff = original - final;
   const percentOff = ((amountOff / original) * 100).toFixed(0);
   
