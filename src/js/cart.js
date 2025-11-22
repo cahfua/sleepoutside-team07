@@ -9,10 +9,7 @@ function renderCartContents() {
 function cartItemTemplate(item) {
   // Image fallback logic - same as ProductDetails.mjs
   const imageUrl =
-    item.Images?.PrimaryLarge ||
-    item.Images?.PrimaryMedium ||
-    item.Image ||
-    "";
+    item.Images?.PrimaryLarge || item.Images?.PrimaryMedium || item.Image || "";
 
   // Color name handling
   const colorName =
@@ -29,7 +26,7 @@ function cartItemTemplate(item) {
     <h2 class="card__name">${item.Name}</h2>
   </a>
   ${colorName ? `<p class="cart-card__color">${colorName}</p>` : ""}
-  <p class="cart-card__quantity">qty: 1</p>
+  <p class="cart-card__quantity">qty: ${item.quantity || 1}</p>
   <p class="cart-card__price">$${item.FinalPrice}</p>
 </li>`;
 
@@ -50,7 +47,10 @@ function renderCartTotal() {
     return;
   }
 
-  const total = cartItems.reduce((sum, item) => sum + item.FinalPrice, 0);
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.FinalPrice * (item.quantity || 1),
+    0,
+  );
 
   footer.classList.remove("hide");
   totalElement.textContent = `Total: $${total.toFixed(2)}`;

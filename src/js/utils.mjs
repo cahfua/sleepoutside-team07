@@ -50,7 +50,9 @@ export function updateCartCount() {
 
   try {
     const cartItems = getLocalStorage("so-cart");
-    const count = cartItems ? cartItems.length : 0;
+    const count = cartItems
+      ? cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0)
+      : 0;
     cartCountElement.textContent = count;
     cartCountElement.style.display = count > 0 ? "block" : "none";
   } catch (error) {
