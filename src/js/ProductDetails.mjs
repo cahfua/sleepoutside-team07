@@ -8,12 +8,10 @@ export default class ProductDetails {
   }
 
   async init() {
-    // use the datasource to get the details for the current product. findProductById will return a promise! use await or .then() to process it
     this.product = await this.dataSource.findProductById(this.productId);
-    // the product details are needed before rendering the HTML
+
     this.renderProductDetails();
-    // once the HTML is rendered, add a listener to the Add to Cart button
-    // Notice the .bind(this). This callback will not work if the bind(this) is missing. Review the readings from this week on 'this' to understand why.
+
     document
       .getElementById("addToCart")
       .addEventListener("click", this.addProductToCart.bind(this));
@@ -28,32 +26,58 @@ export default class ProductDetails {
 
   renderProductDetails() {
     const productSection = document.querySelector(".product-detail");
+
     if (!this.product) {
       productSection.innerHTML = "<p>Product not found</p>";
       return;
     }
 
-    // Get color name if available
+    // Image fallback logic
+    const imageUrl =
+      this.product.Images?.PrimaryLarge ||
+      this.product.Images?.PrimaryMedium ||
+      this.product.Image ||
+      "images/placeholder.png";
+
+    // Color name handling
     const colorName =
       this.product.Colors && this.product.Colors.length > 0
         ? this.product.Colors[0].ColorName
         : "";
 
+    // Discount flag logic
+    let discountHTML = "";
+    const original = this.product.SuggestedRetailPrice;
+    const final = this.product.FinalPrice;
+
+    if (Number(original) > Number(final)) {
+      const amountOff = original - final;
+      const percentOff = ((amountOff / original) * 100).toFixed(0);
+
+      discountHTML = `
+        <p class="discount-flag">You save $${amountOff.toFixed(2)} (${percentOff}% off)</p>
+      `;
+    }
+
     productSection.innerHTML = `
       <h3>${this.product.Brand.Name}</h3>
       <h2 class="divider">${this.product.NameWithoutBrand}</h2>
-      <img
-        class="divider"
-        src="${this.product.Images.PrimaryLarge}"
-        alt="${this.product.Name}"
-      />
-      <p class="product-card__price">$${this.product.FinalPrice.toFixed(2)}</p>
+
+      <img class="divider" src="${imageUrl}" alt="${this.product.Name}" />
+
+      <p class="product-card__price">$${final.toFixed(2)}</p>
+
+      ${discountHTML}
+
       ${colorName ? `<p class="product__color">${colorName}</p>` : ""}
-      <p class="product__description">${this.product.DescriptionHtmlSimple}</p>
+
+      <p class="product__description">
+        ${this.product.DescriptionHtmlSimple || ""}
+      </p>
+
       <div class="product-detail__add">
         <button id="addToCart" data-id="${this.product.Id}">Add to Cart</button>
       </div>
     `;
   }
 }
-
