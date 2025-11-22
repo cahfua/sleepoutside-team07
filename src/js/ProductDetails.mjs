@@ -38,12 +38,15 @@ export default class ProductDetails {
       this.product.Colors && this.product.Colors.length > 0
         ? this.product.Colors[0].ColorName
         : "";
-    //  Calculate discount
-  let discountHTML = "";
-  const original = this.product.SuggestedRetailPrice;
-  const final = this.product.FinalPrice;
 
-  if (original && original > final) {
+       
+  // Discount flag logic
+    
+let discountHTML = "";
+const original = this.product.SuggestedRetailPrice;
+const final = this.product.FinalPrice;
+
+if (original && original > final) {
   const amountOff = original - final;
   const percentOff = ((amountOff / original) * 100).toFixed(0);
   
@@ -53,14 +56,12 @@ export default class ProductDetails {
     )} (${percentOff}% off)</p>
   `;
 }
+
+
     productSection.innerHTML = `
       <h3>${this.product.Brand.Name}</h3>
       <h2 class="divider">${this.product.NameWithoutBrand}</h2>
-      <img
-        class="divider"
-        src="${this.product.Image}"
-        alt="${this.product.Name}"
-      />
+      <img class="divider" src="${this.product.Image}" alt="${this.product.Name}"/>
       <p class="product-card__price">$${this.product.FinalPrice.toFixed(2)}</p>
       ${colorName ? `<p class="product__color">${colorName}</p>` : ""}
       <p class="product__description">${this.product.DescriptionHtmlSimple}</p>
