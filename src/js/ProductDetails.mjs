@@ -38,7 +38,7 @@ export default class ProductDetails {
       this.product.Colors && this.product.Colors.length > 0
         ? this.product.Colors[0].ColorName
         : "";
-     /  / Calculate discount
+    //  Calculate discount
 let discountHTML = "";
 const original = this.product.SuggestedRetailPrice;
 const final = this.product.FinalPrice;
