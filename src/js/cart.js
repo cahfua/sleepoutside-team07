@@ -1,23 +1,34 @@
 import { getLocalStorage, updateCartCount } from "./utils.mjs";
 
 function renderCartContents() {
-  const cartItems = getLocalStorage("so-cart");
+  const cartItems = getLocalStorage("so-cart") || [];
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
 }
 
 function cartItemTemplate(item) {
+  // Image fallback logic - same as ProductDetails.mjs
+  const imageUrl =
+    item.Images?.PrimaryLarge ||
+    item.Images?.PrimaryMedium ||
+    item.Image ||
+    "";
+
+  // Color name handling
+  const colorName =
+    item.Colors && item.Colors.length > 0 ? item.Colors[0].ColorName : "";
+
   const newItem = `<li class="cart-card divider">
   <a href="#" class="cart-card__image">
     <img
-      src="${item.Image}"
+      src="${imageUrl}"
       alt="${item.Name}"
     />
   </a>
   <a href="#">
     <h2 class="card__name">${item.Name}</h2>
   </a>
-  <p class="cart-card__color">${item.Colors[0].ColorName}</p>
+  ${colorName ? `<p class="cart-card__color">${colorName}</p>` : ""}
   <p class="cart-card__quantity">qty: 1</p>
   <p class="cart-card__price">$${item.FinalPrice}</p>
 </li>`;
