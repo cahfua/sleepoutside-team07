@@ -38,7 +38,21 @@ export default class ProductDetails {
       this.product.Colors && this.product.Colors.length > 0
         ? this.product.Colors[0].ColorName
         : "";
+     /  / Calculate discount
+let discountHTML = "";
+const original = this.product.SuggestedRetailPrice;
+const final = this.product.FinalPrice;
 
+if (original && original > final) {
+  const amountOff = original - final;
+  const percentOff = ((amountOff / original) * 100).toFixed(0);
+  
+  discountHTML = `
+    <p class="discount-flag">You save $${amountOff.toFixed(
+      2
+    )} (${percentOff}% off)</p>
+  `;
+}
     productSection.innerHTML = `
       <h3>${this.product.Brand.Name}</h3>
       <h2 class="divider">${this.product.NameWithoutBrand}</h2>
