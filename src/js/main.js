@@ -6,8 +6,8 @@ import { qs, updateCartCount } from "./utils.mjs";
 // Create an instance of Alert
 new Alert();
 
-// Create an instance of ProductData for tents
-const dataSource = new ProductData("tents");
+// Create an instance of ProductData
+const dataSource = new ProductData();
 
 // Get the list element
 const listElement = qs(".product-list");
