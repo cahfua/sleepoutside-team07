@@ -38,13 +38,21 @@ export default class ProductDetails {
       this.product.Colors && this.product.Colors.length > 0
         ? this.product.Colors[0].ColorName
         : "";
+    //  Calculate discount
+  let discountHTML = "";
+  const original = this.product.SuggestedRetailPrice;
+  const final = this.product.FinalPrice;
 
+<<<<<<< HEAD
 //  / Calculate discount
 let discountHTML = "";
 const original = this.product.SuggestedRetailPrice;
 const final = this.product.FinalPrice;
 
 if (original && original > final) {
+=======
+  if (original && original > final) {
+>>>>>>> 27bd49b4cb3da28f6dade6b11ad7c6e9f5de5677
   const amountOff = original - final;
   const percentOff = ((amountOff / original) * 100).toFixed(0);
   
