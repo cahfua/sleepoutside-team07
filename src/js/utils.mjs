@@ -60,3 +60,45 @@ export function updateCartCount() {
     cartCountElement.style.display = "none";
   }
 }
+
+// create and display alert message
+export function alertMessage(message, scroll = true) {
+  // create element to hold the alert
+  const alert = document.createElement("div");
+  // add a class to style the alert
+  alert.classList.add("alert");
+  
+  // set the contents. You should have a message and an X or something the user can click on to remove
+  // Ensure message is always a string and properly escaped
+  const messageText = typeof message === "string" ? message : String(message);
+  alert.innerHTML = `
+    <span class="alert-message">${messageText}</span>
+    <span class="alert-close">×</span>
+  `;
+  
+  // add a listener to the alert to see if they clicked on the X
+  // if they did then remove the child
+  alert.addEventListener("click", function(e) {
+    // Check if they clicked on the X (close button)
+    // hint: check out e.target.tagName or e.target.innerText
+    if (e.target.classList.contains("alert-close") || 
+        e.target.tagName === "SPAN" && e.target.innerText === "×") {
+      const mainElement = document.querySelector("main");
+      if (mainElement && mainElement.contains(this)) {
+        mainElement.removeChild(this);
+      }
+    }
+  });
+  
+  // add the alert to the top of main
+  const main = document.querySelector("main");
+  if (main) {
+    main.prepend(alert);
+  }
+  
+  // make sure they see the alert by scrolling to the top of the window
+  // you may not always want to do this...so default to scroll=true, but allow it to be passed in and overridden.
+  if (scroll) {
+    window.scrollTo(0, 0);
+  }
+}

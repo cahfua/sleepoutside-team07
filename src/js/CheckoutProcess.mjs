@@ -1,4 +1,4 @@
-import { getLocalStorage } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, alertMessage } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
 const TAX_RATE = 0.06;
@@ -59,26 +59,92 @@ export default class CheckoutProcess {
     this.tax = this.subtotal * TAX_RATE;
     this.total = this.subtotal + this.tax + this.shipping;
 
-    document.querySelector("#summary-tax").textContent =
-      `$${this.tax.toFixed(2)}`;
-    document.querySelector("#summary-shipping").textContent =
-      `$${this.shipping.toFixed(2)}`;
-    document.querySelector("#summary-total").textContent =
-      `$${this.total.toFixed(2)}`;
+    this.displayOrderTotals();
   }
 
+  // Display the calculated totals in the order summary
+  displayOrderTotals() {
+    const taxElement = document.querySelector("#summary-tax");
+    const shippingElement = document.querySelector("#summary-shipping");
+    const totalElement = document.querySelector("#summary-total");
+
+    if (taxElement) {
+      taxElement.textContent = `$${this.tax.toFixed(2)}`;
+    }
+    if (shippingElement) {
+      shippingElement.textContent = `$${this.shipping.toFixed(2)}`;
+    }
+    if (totalElement) {
+      totalElement.textContent = `$${this.total.toFixed(2)}`;
+    }
+  }
+
+  // Reset tax, shipping, and total to $0.00 when zip is empty
+  resetOrderTotals() {
+    this.tax = 0;
+    this.shipping = 0;
+    this.total = 0;
+    this.displayOrderTotals();
+  }
+  
   // prepare the JSON order object/send it to ExternalServices
   async checkout(form) {
-    const formData = new FormData(form);
-    const order = formDataToJSON(formData);
+    try {
+      const formData = new FormData(form);
+      const order = formDataToJSON(formData);
 
-    order.orderDate = new Date().toISOString();
-    order.items = packageItems(this.items);
-    order.orderTotal = this.total.toFixed(2);
-    order.shipping = this.shipping;
-    order.tax = this.tax.toFixed(2);
+      order.orderDate = new Date().toISOString();
+      order.items = packageItems(this.items);
+      order.orderTotal = this.total.toFixed(2);
+      order.shipping = this.shipping;
+      order.tax = this.tax.toFixed(2);
 
-    const result = await this.services.checkout(order);
-    console.log("Server response:", result);
+      await this.services.checkout(order);
+
+      // Handle successful checkout
+      // Clear the cart
+      setLocalStorage(this.cartKey, []);
+
+      // Redirect to success page
+      window.location.href = "../checkout/success.html";
+    } catch (err) {
+      // Handle error
+      if (err.name === "servicesError") {
+        const errorMessages = this.extractErrorMessages(err.message);
+        errorMessages.forEach((msg) => {
+          alertMessage(msg, true);
+        });
+      } else {
+        // Display generic error message
+        alertMessage(
+          "An error occurred during checkout. Please try again.",
+          true,
+        );
+      }
+    }
+  }
+
+  extractErrorMessages(errorObj) {
+    if (!errorObj) {
+      return ["An error occurred. Please try again."];
+    }
+
+    // If it's already a string, return it
+    if (typeof errorObj === "string") {
+      return [errorObj];
+    }
+
+    // Extract error messages from object values
+    // e.g., { "cardNumber": "Invalid Card Number" } -> ["Invalid Card Number"]
+    const messages = Object.values(errorObj).filter(
+      (value) => typeof value === "string",
+    );
+
+    // If no messages were extracted, return a default message
+    if (messages.length === 0) {
+      return ["Please check your information and try again."];
+    }
+
+    return messages;
   }
 }
