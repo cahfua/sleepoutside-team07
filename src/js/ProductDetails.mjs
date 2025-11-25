@@ -33,8 +33,6 @@ export default class ProductDetails {
 
     setLocalStorage("so-cart", currentCart);
     updateCartCount();
-    
-    // Show success message
     alertMessage(`${this.product.NameWithoutBrand} added to cart!`, false);
   }
 
@@ -46,12 +44,24 @@ export default class ProductDetails {
       return;
     }
 
-    // Image fallback logic
-    const imageUrl =
+    // Responsive image fallback logic
+    const smallImage =
+      this.product.Images?.PrimarySmall ||
+      this.product.Images?.PrimaryMedium ||
+      this.product.Image ||
+      "/images/placeholder.png";
+
+    const mediumImage =
+      this.product.Images?.PrimaryMedium ||
+      this.product.Images?.PrimaryLarge ||
+      this.product.Image ||
+      "/images/placeholder.png";
+
+    const largeImage =
       this.product.Images?.PrimaryLarge ||
       this.product.Images?.PrimaryMedium ||
       this.product.Image ||
-      "images/placeholder.png";
+      "/images/placeholder.png";
 
     // Color name handling
     const colorName =
@@ -59,35 +69,31 @@ export default class ProductDetails {
         ? this.product.Colors[0].ColorName
         : "";
 
-    // Discount flag logic
-    let discountHTML = "";
-    const original = this.product.SuggestedRetailPrice;
-    const final = this.product.FinalPrice;
-
-    if (Number(original) > Number(final)) {
-      const amountOff = original - final;
-      const percentOff = ((amountOff / original) * 100).toFixed(0);
-
-      discountHTML = `
-        <p class="discount-flag">You save $${amountOff.toFixed(2)} (${percentOff}% off)</p>
-      `;
-    }
-
     productSection.innerHTML = `
       <h3>${this.product.Brand.Name}</h3>
       <h2 class="divider">${this.product.NameWithoutBrand}</h2>
 
-      <img class="divider" src="${imageUrl}" alt="${this.product.Name}" />
+      <img
+        class="divider"
+        src="${mediumImage}"
+        srcset="
+          ${smallImage} 400w,
+          ${mediumImage} 800w,
+          ${largeImage} 1200w
+        "
+        sizes="
+          (max-width: 600px) 90vw,
+          (max-width: 900px) 50vw,
+          40vw
+        "
+        alt="${this.product.Name}"
+      />
 
-      <p class="product-card__price">$${final.toFixed(2)}</p>
-
-      ${discountHTML}
+      <p class="product-card__price">$${this.product.FinalPrice.toFixed(2)}</p>
 
       ${colorName ? `<p class="product__color">${colorName}</p>` : ""}
 
-      <p class="product__description">
-        ${this.product.DescriptionHtmlSimple || ""}
-      </p>
+      <p class="product__description">${this.product.DescriptionHtmlSimple}</p>
 
       <div class="product-detail__add">
         <button id="addToCart" data-id="${this.product.Id}">Add to Cart</button>

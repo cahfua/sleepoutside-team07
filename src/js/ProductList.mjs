@@ -1,10 +1,38 @@
 import { renderListWithTemplate } from "./utils.mjs";
 
 function productCardTemplate(product) {
+  const small =
+    product.Images?.PrimarySmall ||
+    product.Images?.PrimaryMedium ||
+    product.Image ||
+    "/images/placeholder.png";
+
+  const medium =
+    product.Images?.PrimaryMedium ||
+    product.Images?.PrimaryLarge ||
+    product.Image ||
+    "/images/placeholder.png";
+
+  const large =
+    product.Images?.PrimaryLarge ||
+    product.Images?.PrimaryMedium ||
+    product.Image ||
+    "/images/placeholder.png";
+
   return `<li class="product-card">
     <a href="../product_pages/?product=${product.Id}">
       <img
-        src="${product.Images.PrimaryMedium}"
+        src="${medium}"
+        srcset="
+          ${small} 400w,
+          ${medium} 800w,
+          ${large} 1200w
+        "
+        sizes="
+          (max-width: 600px) 90vw,
+          (max-width: 900px) 40vw,
+          20vw
+        "
         alt="${product.NameWithoutBrand || product.Name}"
       />
       <h3 class="card__brand">${product.Brand.Name}</h3>
