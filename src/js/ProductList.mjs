@@ -28,3 +28,28 @@ export default class ProductList {
     renderListWithTemplate(productCardTemplate, this.listElement, list);
   }
 }
+
+// Sort handler
+
+addSortHandler() {
+    const sortSelect = document.getElementById("sort");
+    if (!sortSelect) return; // safety check
+
+    sortSelect.addEventListener("change", () => {
+      let sortedProducts = [...this.products];
+
+      if (sortSelect.value === "name") {
+        sortedProducts.sort((a, b) =>
+          (a.NameWithoutBrand || a.Name).localeCompare(
+            b.NameWithoutBrand || b.Name
+          )
+        );
+      }
+
+      if (sortSelect.value === "price") {
+        sortedProducts.sort((a, b) => a.FinalPrice - b.FinalPrice);
+      }
+
+      this.renderList(sortedProducts);
+    });
+  }
