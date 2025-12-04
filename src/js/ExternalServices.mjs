@@ -1,39 +1,39 @@
-const baseURL = import.meta.env.VITE_SERVER_URL;
-
-async function convertToJson(res) {
-  const jsonResponse = await res.json();
-  if (res.ok) {
-    return jsonResponse;
-  } else {
-    throw { name: "servicesError", message: jsonResponse };
-  }
-}
-
 export default class ExternalServices {
   constructor() {
     // category and path removed - category will be passed when needed
   }
   async getData(category) {
-    const response = await fetch(`${baseURL}products/search/${category}`);
-    const data = await convertToJson(response);
-    return data.Result;
+    const response = await fetch(`/json/${category}.json`);
+
+    if (!response.ok) {
+      throw new Error(
+        `Error loading ${category}: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data)) {
+      return [];
+    }
+
+    return data;
   }
   async findProductById(id) {
-    const response = await fetch(`${baseURL}product/${id}`);
-    const data = await convertToJson(response);
-    return data.Result;
-  }
+    const categories = ["tents", "backpacks", "sleeping-bags"];
 
-  async checkout(payload) {
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    };
-    return fetch(`${baseURL}checkout`, options).then(
-      convertToJson
-    );
+    for (const cat of categories) {
+      const response = await fetch(`/json/${cat}.json`);
+
+      if (!response.ok) {
+        continue;
+      }
+
+      const data = await response.json();
+      const found = data.find((item) => item.Id === id);
+      if (found) return found;
+    }
+
+    return null;
   }
 }
