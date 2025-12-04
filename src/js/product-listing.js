@@ -1,6 +1,6 @@
 import ExternalServices from "./ExternalServices.mjs";
 import ProductList from "./ProductList.mjs";
-import { getParam, updateCartCount } from "./utils.mjs";
+import { getParam, updateCartCount, qs } from "./utils.mjs";
 
 const category = getParam("category");
 
@@ -17,6 +17,16 @@ function updatePageTitle(value) {
   }
 }
 
+function updateBreadcrumb(cat, count) {
+  const breadcrumb = qs(".breadcrumb");
+  if (breadcrumb) {
+    const categoryName = cat
+      ? cat.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")
+      : "Products";
+    breadcrumb.textContent = `${categoryName} → (${count} items)`;
+  }
+}
+
 // first create an instance of the ExternalServices class.
 const dataSource = new ExternalServices();
 // then get the element you want the product list to render in
@@ -24,7 +34,11 @@ const listElement = document.querySelector(".product-list");
 // then create an instance of the ProductList class and send it the correct information.
 const myList = new ProductList(category, dataSource, listElement);
 // finally call the init method to show the products
-myList.init();
+typeof myList.init === "function"
+  ? myList.init().then(() => {
+      updateBreadcrumb(category, myList.products.length);
+    })
+  : updateBreadcrumb(category, 0);
 
 // Update page title
 updatePageTitle(category);

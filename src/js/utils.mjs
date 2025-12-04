@@ -54,17 +54,20 @@ export function updateCartCount() {
       ? cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0)
       : 0;
     cartCountElement.textContent = count;
-    cartCountElement.style.display = count > 0 ? "block" : "none";
+    cartCountElement.style.display = count > 0 ? "flex" : "none";
 
-    // Animation for backpack icon
-    const cartIcon = cartCountElement.previousElementSibling;
-    if (cartIcon && cartIcon.tagName === "SVG") {
+    // Animation for backpack icon - buscar el SVG correctamente
+    const cartContainer = qs(".cart");
+    const cartIcon = cartContainer ? cartContainer.querySelector("svg") : null;
+
+    if (cartIcon) {
       cartIcon.classList.add("cart-animate");
       cartIcon.addEventListener("animationend", () => {
         cartIcon.classList.remove("cart-animate");
       }, { once: true });
     }
   } catch (error) {
+    console.error("Error updating cart count:", error);
     cartCountElement.textContent = "0";
     cartCountElement.style.display = "none";
   }
