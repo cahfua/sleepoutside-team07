@@ -55,6 +55,15 @@ export function updateCartCount() {
       : 0;
     cartCountElement.textContent = count;
     cartCountElement.style.display = count > 0 ? "block" : "none";
+
+    // Animation for backpack icon
+    const cartIcon = cartCountElement.previousElementSibling;
+    if (cartIcon && cartIcon.tagName === "SVG") {
+      cartIcon.classList.add("cart-animate");
+      cartIcon.addEventListener("animationend", () => {
+        cartIcon.classList.remove("cart-animate");
+      }, { once: true });
+    }
   } catch (error) {
     cartCountElement.textContent = "0";
     cartCountElement.style.display = "none";
